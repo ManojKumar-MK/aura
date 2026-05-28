@@ -1,36 +1,87 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Aura — Enterprise SaaS Website
+
+A modern, full-featured SaaS marketing website built with **Next.js 15**, **TypeScript**, **Tailwind CSS**, and **Framer Motion**. Supports English and Tamil (i18n), dark mode, and smooth scroll animations.
+
+## Live Demo
+
+> Deployed via Vercel — link added after first deployment.
+
+## Screenshots
+
+| Hero | Services | Pricing |
+|------|----------|---------|
+| ![Hero](public/screenshots/hero.png) | ![Services](public/screenshots/services.png) | ![Pricing](public/screenshots/pricing.png) |
+
+> Screenshots are captured from the live deployment.
+
+## What This Site Covers
+
+- **Software Development** — Enterprise software, cloud architecture, workflow automation, data platforms, payment systems
+- **Teaching & Education** — EdTech & LMS platforms, interactive course builders, student progress dashboards
+- **Digital Marketing** — Marketing automation, SEO infrastructure, brand & content strategy, campaign analytics
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Framework | Next.js 15 (App Router) |
+| Language | TypeScript |
+| Styling | Tailwind CSS v4 |
+| Animation | Framer Motion |
+| i18n | next-intl (EN + Tamil) |
+| UI Components | Radix UI + shadcn/ui |
+| Icons | Lucide React |
+| Deployment | Vercel |
+
+## Sections
+
+- **Hero** — Animated headline with CTA buttons
+- **Services** — 9-card tilt-on-hover grid (Software, EdTech, Marketing)
+- **Process** — 6-step delivery methodology
+- **Case Studies** — Proof-of-impact showcase
+- **Tech Stack** — Marquee logo strip
+- **Social Proof** — Testimonials + trust signals
+- **Pricing** — Monthly/yearly toggle with three tiers
+- **FAQ** — Accordion with software, teaching, and marketing FAQs
+- **CTA** — Email capture with mailto integration
+- **Footer** — Navigation + links
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## i18n
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Switch language via the navbar toggle. Translations live in:
+- `src/messages/en.json` — English
+- `src/messages/ta.json` — Tamil
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+├── app/[locale]/       # Locale-aware layouts and pages
+├── components/
+│   ├── layout/         # Navbar, Footer
+│   ├── sections/       # All page sections
+│   └── ui/             # Shared UI primitives
+├── messages/           # i18n translation files
+└── i18n/               # next-intl routing config
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deployment
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Connect the GitHub repo to [Vercel](https://vercel.com). Every push to `main` triggers an automatic deployment.
 
-## Deploy on Vercel
+## Branch Policy
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Direct pushes to `main` are restricted to the repository owner. All contributions must go through a pull request.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## License
+
+MIT © 2026 Aura Software Studio

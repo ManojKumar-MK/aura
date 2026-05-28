@@ -3,20 +3,17 @@
 import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/motion";
-import { Code2, Settings2, CloudIcon, ShieldCheck, Database, LayoutTemplate, GraduationCap, Megaphone, TrendingUp, ArrowRight } from "lucide-react";
+import { ShoppingCart, BarChart3, GraduationCap, BookOpen, Palette, Megaphone, ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { scrollToSection } from "@/lib/utils";
 
 const serviceConfig = [
-  { icon: Code2,        color: "text-primary",    glow: "from-primary/20",    border: "group-hover:border-primary/50",    bg: "bg-primary/10"    },
-  { icon: Settings2,    color: "text-accent",      glow: "from-accent/20",     border: "group-hover:border-accent/50",     bg: "bg-accent/10"     },
-  { icon: CloudIcon,    color: "text-yellow-400",  glow: "from-yellow-500/20", border: "group-hover:border-yellow-500/50", bg: "bg-yellow-500/10" },
-  { icon: ShieldCheck,  color: "text-green-400",   glow: "from-green-500/20",  border: "group-hover:border-green-500/50",  bg: "bg-green-500/10"  },
-  { icon: Database,     color: "text-blue-400",    glow: "from-blue-500/20",   border: "group-hover:border-blue-500/50",   bg: "bg-blue-500/10"   },
-  { icon: LayoutTemplate,  color: "text-purple-400",  glow: "from-purple-500/20",  border: "group-hover:border-purple-500/50",  bg: "bg-purple-500/10"  },
-  { icon: GraduationCap,  color: "text-orange-400",  glow: "from-orange-500/20",  border: "group-hover:border-orange-500/50",  bg: "bg-orange-500/10"  },
-  { icon: Megaphone,      color: "text-pink-400",    glow: "from-pink-500/20",    border: "group-hover:border-pink-500/50",    bg: "bg-pink-500/10"    },
-  { icon: TrendingUp,     color: "text-teal-400",    glow: "from-teal-500/20",    border: "group-hover:border-teal-500/50",    bg: "bg-teal-500/10"    },
+  { icon: ShoppingCart,  color: "text-primary",    glow: "from-primary/20",    border: "group-hover:border-primary/50",    bg: "bg-primary/10"    },
+  { icon: BarChart3,     color: "text-accent",     glow: "from-accent/20",     border: "group-hover:border-accent/50",     bg: "bg-accent/10"     },
+  { icon: GraduationCap, color: "text-orange-400", glow: "from-orange-500/20", border: "group-hover:border-orange-500/50", bg: "bg-orange-500/10" },
+  { icon: BookOpen,      color: "text-yellow-400", glow: "from-yellow-500/20", border: "group-hover:border-yellow-500/50", bg: "bg-yellow-500/10" },
+  { icon: Palette,       color: "text-pink-400",   glow: "from-pink-500/20",   border: "group-hover:border-pink-500/50",   bg: "bg-pink-500/10"   },
+  { icon: Megaphone,     color: "text-teal-400",   glow: "from-teal-500/20",   border: "group-hover:border-teal-500/50",   bg: "bg-teal-500/10"   },
 ];
 
 function TiltCard({ children, className }: { children: React.ReactNode; className?: string }) {

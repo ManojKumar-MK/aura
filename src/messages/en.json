@@ -14,43 +14,31 @@
   },
   "Services": {
     "heading": "Capabilities designed for scale.",
-    "subheading": "We deliver end-to-end excellence across software engineering, online education, and digital marketing.",
+    "subheading": "Everything your small business needs — beautiful online stores, engaging learning platforms, and marketing that gets noticed.",
     "learnMore": "Learn more",
     "item0": {
-      "title": "Enterprise Software",
-      "description": "Custom-built, scalable solutions tailored for complex organizational workflows."
+      "title": "Ecommerce Development",
+      "description": "Beautiful, fast online stores with product management, cart, checkout, and payment gateway integration."
     },
     "item1": {
-      "title": "Workflow Automation",
-      "description": "Streamline operations with AI-assisted agents and automated pipelines."
+      "title": "Ecommerce Analytics",
+      "description": "Sales dashboards, inventory tracking, and customer insight tools to help your store grow smarter."
     },
     "item2": {
-      "title": "Cloud Architecture",
-      "description": "High-performance, resilient cloud infrastructure on AWS and GCP."
+      "title": "EdTech & LMS Platforms",
+      "description": "Custom learning management systems, video course builders, and student progress tracking for educators."
     },
     "item3": {
-      "title": "Payment & Risk Systems",
-      "description": "Secure, compliant financial systems engineered for massive transaction volume."
+      "title": "Online Course Tools",
+      "description": "Interactive quizzes, lesson schedulers, and certificate systems — everything students and teachers need."
     },
     "item4": {
-      "title": "Data Platforms",
-      "description": "Centralized data lakes and real-time analytics engines for informed decisions."
+      "title": "Brand Identity & Design",
+      "description": "Logo systems, colour palettes, and style guides that make your brand instantly recognisable."
     },
     "item5": {
-      "title": "Internal Admin Tools",
-      "description": "Powerful bespoke dashboards and internal apps to manage your business."
-    },
-    "item6": {
-      "title": "EdTech & Learning Platforms",
-      "description": "Custom LMS, course platforms, and interactive learning tools built for educators and institutions."
-    },
-    "item7": {
-      "title": "Digital Marketing Systems",
-      "description": "End-to-end marketing automation, SEO infrastructure, and campaign analytics platforms."
-    },
-    "item8": {
-      "title": "Brand & Content Strategy",
-      "description": "Data-driven content pipelines, brand identity systems, and growth marketing frameworks."
+      "title": "Digital Marketing & SEO",
+      "description": "SEO-optimised landing pages, social media content, and campaign analytics to grow your audience."
     }
   },
   "Process": {

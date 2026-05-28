@@ -1,7 +1,7 @@
 {
   "Hero": {
     "title": "Scale your vision without limits.",
-    "subtitle": "We build enterprise-grade software, AI-assisted cloud platforms, and internal tools that power the next generation of industry leaders.",
+    "subtitle": "We build enterprise software, scalable EdTech platforms, and data-driven marketing solutions that help businesses grow, learn, and lead.",
     "startProject": "Start your project",
     "viewShowcase": "View showcase",
     "available": "Aura 2.0 is now available"
@@ -14,7 +14,7 @@
   },
   "Services": {
     "heading": "Capabilities designed for scale.",
-    "subheading": "We provide end-to-end engineering excellence across the entire technology stack.",
+    "subheading": "We deliver end-to-end excellence across software engineering, online education, and digital marketing.",
     "learnMore": "Learn more",
     "item0": {
       "title": "Enterprise Software",
@@ -39,6 +39,18 @@
     "item5": {
       "title": "Internal Admin Tools",
       "description": "Powerful bespoke dashboards and internal apps to manage your business."
+    },
+    "item6": {
+      "title": "EdTech & Learning Platforms",
+      "description": "Custom LMS, course platforms, and interactive learning tools built for educators and institutions."
+    },
+    "item7": {
+      "title": "Digital Marketing Systems",
+      "description": "End-to-end marketing automation, SEO infrastructure, and campaign analytics platforms."
+    },
+    "item8": {
+      "title": "Brand & Content Strategy",
+      "description": "Data-driven content pipelines, brand identity systems, and growth marketing frameworks."
     }
   },
   "Process": {
@@ -187,6 +199,14 @@
     "item4": {
       "question": "Do you offer post-launch support and maintenance?",
       "answer": "Yes, we offer ongoing SLA-backed support contracts that cover DevOps, uptime monitoring, bug fixes, and feature iterations. We never abandon a deployment."
+    },
+    "item5": {
+      "question": "Do you build teaching and educational platforms?",
+      "answer": "Yes. We design and build full-featured LMS systems, video course platforms, quiz engines, and student progress dashboards. Whether you're an independent educator or an institution, we tailor the learning experience to your audience."
+    },
+    "item6": {
+      "question": "Can you help with digital marketing and growth?",
+      "answer": "Absolutely. We build the technical infrastructure behind marketing — SEO-optimised landing pages, email automation pipelines, analytics dashboards, CRM integrations, and ad performance tracking. We bridge the gap between engineering and marketing."
     }
   },
   "Cta": {
@@ -197,13 +217,15 @@
     "successMessage": "✓ Opening your mail client…"
   },
   "Footer": {
-    "tagline": "Building premium, scalable enterprise software and AI-assisted cloud architecture for the next generation of companies.",
+    "tagline": "Building premium software, EdTech platforms, and digital marketing solutions for the next generation of companies.",
     "servicesHeading": "Core Services",
     "companyHeading": "Company",
     "enterpriseSystems": "Enterprise Systems",
     "dataPlatforms": "Data Platforms",
     "cloudArchitecture": "Cloud Architecture",
     "fintechSolutions": "Fintech Solutions",
+    "edtechPlatforms": "EdTech Platforms",
+    "digitalMarketing": "Digital Marketing",
     "aboutUs": "About Us",
     "process": "Process",
     "careers": "Careers",

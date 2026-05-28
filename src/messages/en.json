@@ -1,0 +1,215 @@
+{
+  "Hero": {
+    "title": "Scale your vision without limits.",
+    "subtitle": "We build enterprise-grade software, AI-assisted cloud platforms, and internal tools that power the next generation of industry leaders.",
+    "startProject": "Start your project",
+    "viewShowcase": "View showcase",
+    "available": "Aura 2.0 is now available"
+  },
+  "Navbar": {
+    "services": "Services",
+    "process": "Process",
+    "work": "Work",
+    "startProject": "Get in Touch"
+  },
+  "Services": {
+    "heading": "Capabilities designed for scale.",
+    "subheading": "We provide end-to-end engineering excellence across the entire technology stack.",
+    "learnMore": "Learn more",
+    "item0": {
+      "title": "Enterprise Software",
+      "description": "Custom-built, scalable solutions tailored for complex organizational workflows."
+    },
+    "item1": {
+      "title": "Workflow Automation",
+      "description": "Streamline operations with AI-assisted agents and automated pipelines."
+    },
+    "item2": {
+      "title": "Cloud Architecture",
+      "description": "High-performance, resilient cloud infrastructure on AWS and GCP."
+    },
+    "item3": {
+      "title": "Payment & Risk Systems",
+      "description": "Secure, compliant financial systems engineered for massive transaction volume."
+    },
+    "item4": {
+      "title": "Data Platforms",
+      "description": "Centralized data lakes and real-time analytics engines for informed decisions."
+    },
+    "item5": {
+      "title": "Internal Admin Tools",
+      "description": "Powerful bespoke dashboards and internal apps to manage your business."
+    }
+  },
+  "Process": {
+    "heading": "How we deliver.",
+    "subheading": "A battle-tested methodology transforming complex enterprise requirements into production-ready massive scale applications.",
+    "item0": {
+      "title": "Discovery",
+      "description": "Deep dive into your business logic, system constraints, and objectives."
+    },
+    "item1": {
+      "title": "Architecture",
+      "description": "System design, cloud infrastructure planning, and tech stack selection."
+    },
+    "item2": {
+      "title": "Development",
+      "description": "Agile engineering sprints focusing on scalable, secure, and robust code."
+    },
+    "item3": {
+      "title": "Testing",
+      "description": "Automated test suites, security audits, and QA for a zero-bug deployment."
+    },
+    "item4": {
+      "title": "Deployment",
+      "description": "Seamless CI/CD pipelines deploying your platform to production smoothly."
+    },
+    "item5": {
+      "title": "Scaling",
+      "description": "Continuous monitoring, auto-scaling integration, and SLA-backed support."
+    }
+  },
+  "CaseStudies": {
+    "heading": "Proven impact.",
+    "subheading": "See how our tailored solutions have modernized legacy systems and powered explosive revenue growth for our enterprise partners.",
+    "readMore": "Read Case Study",
+    "item0": {
+      "tag1": "Fintech",
+      "tag2": "Platform Revamp",
+      "title": "Global Payments Infrastructure",
+      "description": "Migrated monolithic architecture to microservices, unlocking unlimited scalability.",
+      "stat1Label": "Faster transactions",
+      "stat2Label": "Operations daily"
+    },
+    "item1": {
+      "tag": "AI Integration",
+      "title": "Smart CRM Agent",
+      "statLabel": "Increase in sales velocity"
+    },
+    "item2": {
+      "tag": "Healthcare",
+      "title": "Data Analytics Lake",
+      "statLabel": "Cost reduction"
+    },
+    "item3": {
+      "tag": "Internal Tools",
+      "title": "Command Center OS",
+      "description": "A unified operational dashboard tailored specifically for logistics & supply chain tracking."
+    }
+  },
+  "TechStack": {
+    "label": "Architecture",
+    "heading": "Built on modern, uncompromised technology.",
+    "subheading": "We leverage the best tools from modern ecosystems to create high-availability, fault-tolerant platforms."
+  },
+  "SocialProof": {
+    "heading": "Trusted by the best.",
+    "subheading": "Our work speaks for itself, but our partners say it better.",
+    "topEngineeringTitle": "Top 1% Engineering",
+    "topEngineeringDesc": "We hire only senior engineers who have built systems at massive scale. You never get junior resources learning on your dime.",
+    "zeroDebtTitle": "Zero Technical Debt",
+    "zeroDebtDesc": "Our rigorous QA, testing protocols, and CI/CD ensure that what we deploy works flawlessly from day one.",
+    "item0": {
+      "quote": "Aura's engineering team completely transformed our backend. We went from struggling with scaling issues to handling 10x traffic seamlessly.",
+      "author": "Sarah Jenkins",
+      "role": "CTO, Scaling Startup",
+      "company": "TechFlow"
+    },
+    "item1": {
+      "quote": "The internal tools they built for us saved our operations team roughly 40 hours a week. Their understanding of enterprise needs is unparalleled.",
+      "author": "Marcus Chen",
+      "role": "VP Operations",
+      "company": "Global Logistics Inc."
+    },
+    "item2": {
+      "quote": "Working with Aura felt like having an elite in-house engineering team. The code quality, communication, and delivery speed were flawless.",
+      "author": "Elena Rodriguez",
+      "role": "Founder",
+      "company": "FinVault"
+    }
+  },
+  "Pricing": {
+    "heading": "Transparent, predictable investment.",
+    "subheading": "Enterprise-grade engineering should be an investment in growth, not a black box of billable hours.",
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "saveLabel": "Save 10%",
+    "mostPopular": "Most Popular",
+    "getStarted": "Get Started",
+    "perMonth": "/mo",
+    "item0": {
+      "name": "Growth",
+      "description": "For startups ready to scale operations.",
+      "feature0": "Dedicated full-stack engineer",
+      "feature1": "Weekly sprint planning",
+      "feature2": "Standard SLA response time",
+      "feature3": "Architecture review",
+      "feature4": "24/7 Priority support"
+    },
+    "item1": {
+      "name": "Enterprise",
+      "description": "For established businesses needing custom solutions.",
+      "feature0": "Two dedicated senior engineers",
+      "feature1": "Full agile pods access",
+      "feature2": "4-hour SLA response time",
+      "feature3": "Full architecture blueprinting",
+      "feature4": "24/7 Priority support"
+    },
+    "item2": {
+      "name": "Platform",
+      "description": "Complete technical partnership and ownership.",
+      "feature0": "Complete elite engineering pod",
+      "feature1": "Dedicated project manager & QA",
+      "feature2": "1-hour critical SLA",
+      "feature3": "Infrastructure scaling & DevOps",
+      "feature4": "24/7 Priority support"
+    }
+  },
+  "Faq": {
+    "heading": "Commonly asked questions.",
+    "subheading": "Everything you need to know about working with Aura.",
+    "item0": {
+      "question": "Do you only work with enterprise companies?",
+      "answer": "While our infrastructure is built for enterprise scale, we frequently partner with well-funded startups and mid-market companies that require robust, high-performance systems from day one to support rapid scaling."
+    },
+    "item1": {
+      "question": "What is your typical project timeline?",
+      "answer": "Project timelines vary based on complexity, but most initial MVPs or phase-one deliverables are complete within 2 to 3 months. Enterprise migrations or core system rewrites generally span 6 to 12 months with continuous agile delivery."
+    },
+    "item2": {
+      "question": "How do you handle security and compliance?",
+      "answer": "Security is baked into our CI/CD pipelines. We adhere strictly to SOC 2, HIPAA, or ISO 27001 compliance standards depending on your industry. All code undergoes automated vulnerability scanning and manual peer review."
+    },
+    "item3": {
+      "question": "Will we own the intellectual property (IP)?",
+      "answer": "Yes, absolutely. Once the project is completed and invoices are settled, the intellectual property, source code, and all related assets are entirely yours."
+    },
+    "item4": {
+      "question": "Do you offer post-launch support and maintenance?",
+      "answer": "Yes, we offer ongoing SLA-backed support contracts that cover DevOps, uptime monitoring, bug fixes, and feature iterations. We never abandon a deployment."
+    }
+  },
+  "Cta": {
+    "heading": "Ready to build something extraordinary?",
+    "subheading": "Stop letting technical limitations dictate your business roadmap. Partner with an engineering team that guarantees delivery.",
+    "emailPlaceholder": "Enter your work email",
+    "submitButton": "Request a Consultation",
+    "successMessage": "✓ Opening your mail client…"
+  },
+  "Footer": {
+    "tagline": "Building premium, scalable enterprise software and AI-assisted cloud architecture for the next generation of companies.",
+    "servicesHeading": "Core Services",
+    "companyHeading": "Company",
+    "enterpriseSystems": "Enterprise Systems",
+    "dataPlatforms": "Data Platforms",
+    "cloudArchitecture": "Cloud Architecture",
+    "fintechSolutions": "Fintech Solutions",
+    "aboutUs": "About Us",
+    "process": "Process",
+    "careers": "Careers",
+    "contact": "Contact",
+    "copyright": "© 2026 Aura Software Studio. All rights reserved.",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service"
+  }
+}

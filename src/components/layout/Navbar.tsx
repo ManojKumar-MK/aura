@@ -6,8 +6,13 @@ import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import { Menu, X, Hexagon, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTranslations, useLocale } from "next-intl";
+import { scrollToSection } from "@/lib/utils";
 
-export function Navbar() {
+interface Props {
+  config?: Record<string, string>;
+}
+
+export function Navbar({ config = {} }: Props) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { scrollY } = useScroll();
@@ -17,7 +22,7 @@ export function Navbar() {
   const pathname = usePathname();
 
   const toggleLanguage = () => {
-    const nextLocale = locale === 'en' ? 'ta' : 'en';
+    const nextLocale = locale === "en" ? "ta" : "en";
     router.replace(pathname, { locale: nextLocale });
   };
 
@@ -25,11 +30,13 @@ export function Navbar() {
     setIsScrolled(latest > 20);
   });
 
-  const navLinks = [
-    { name: t("services"), href: "#services" },
-    { name: t("process"), href: "#process" },
-    { name: t("work"), href: "#work" },
+  const allLinks = [
+    { name: config.nav_label_services ?? t("services"), id: "services", flag: "show_services" },
+    { name: config.nav_label_academy  ?? t("academy"),  id: "academy",  flag: "show_academy"  },
+    { name: config.nav_label_work     ?? t("work"),     id: "work",     flag: "show_impact"   },
   ];
+
+  const navLinks = allLinks.filter(link => config[link.flag] !== "false");
 
   return (
     <motion.header
@@ -38,7 +45,7 @@ export function Navbar() {
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       className={`fixed top-0 left-0 right-0 z-50 flex justify-center transition-all duration-300 ${isScrolled ? "py-4" : "py-6"}`}
     >
-      <div 
+      <div
         className={`w-full max-w-6xl mx-4 px-6 py-3 rounded-2xl flex items-center justify-between border transition-all duration-300 ${
           isScrolled
             ? "bg-background/80 backdrop-blur-md border-border/50 shadow-lg"
@@ -52,24 +59,28 @@ export function Navbar() {
 
         <nav className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
-            <Link key={link.name} href={link.href} className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">
+            <button
+              key={link.id}
+              onClick={() => scrollToSection(link.id)}
+              className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors cursor-pointer"
+            >
               {link.name}
-            </Link>
+            </button>
           ))}
         </nav>
 
         <div className="flex items-center gap-4">
-          <button 
+          <button
             onClick={toggleLanguage}
             className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-border/50 hover:bg-muted transition-colors text-sm font-medium text-foreground"
           >
             <Globe className="w-4 h-4 text-muted-foreground" />
-            {locale === 'en' ? 'TA' : 'EN'}
+            {locale === "en" ? "TA" : "EN"}
           </button>
-          
+
           <Button
             className="hidden md:inline-flex bg-foreground text-background hover:bg-primary transition-colors"
-            onClick={() => document.getElementById('cta')?.scrollIntoView({ behavior: 'smooth' })}
+            onClick={() => scrollToSection("cta")}
           >
             {t("startProject")}
           </Button>
@@ -80,17 +91,23 @@ export function Navbar() {
       </div>
 
       {mobileMenuOpen && (
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="absolute top-24 left-4 right-4 bg-background border border-border/50 rounded-2xl p-6 shadow-xl flex flex-col gap-6 md:hidden"
         >
           {navLinks.map((link) => (
-            <Link key={link.name} href={link.href} onClick={() => setMobileMenuOpen(false)} className="text-lg font-medium text-foreground hover:text-primary transition-colors">
+            <button
+              key={link.id}
+              onClick={() => { scrollToSection(link.id); setMobileMenuOpen(false); }}
+              className="text-lg font-medium text-foreground hover:text-primary transition-colors text-left"
+            >
               {link.name}
-            </Link>
+            </button>
           ))}
-          <Button className="w-full bg-foreground text-background" onClick={() => { document.getElementById('cta')?.scrollIntoView({ behavior: 'smooth' }); setMobileMenuOpen(false); }}>{t("startProject")}</Button>
+          <Button className="w-full bg-foreground text-background" onClick={() => { scrollToSection("cta"); setMobileMenuOpen(false); }}>
+            {t("startProject")}
+          </Button>
         </motion.div>
       )}
     </motion.header>

@@ -8,38 +8,56 @@
   },
   "Navbar": {
     "services": "Services",
+    "academy": "Academy",
     "process": "Process",
     "work": "Work",
     "startProject": "Get in Touch"
   },
   "Services": {
-    "heading": "Capabilities designed for scale.",
-    "subheading": "Everything your small business needs — beautiful online stores, engaging learning platforms, and marketing that gets noticed.",
+    "heading": "What we build for you.",
+    "subheading": "Simple, focused services to help your business grow online — from your store to your brand.",
     "learnMore": "Learn more",
     "item0": {
-      "title": "Ecommerce Development",
-      "description": "Beautiful, fast online stores with product management, cart, checkout, and payment gateway integration."
+      "title": "Ecommerce for Business",
+      "description": "Get your products online fast. We build clean, easy-to-manage stores with cart, checkout, and payment support."
     },
     "item1": {
-      "title": "Ecommerce Analytics",
-      "description": "Sales dashboards, inventory tracking, and customer insight tools to help your store grow smarter."
+      "title": "Landing Page",
+      "description": "A sharp, conversion-focused page that tells your story, captures leads, and makes a strong first impression."
     },
     "item2": {
-      "title": "EdTech & LMS Platforms",
-      "description": "Custom learning management systems, video course builders, and student progress tracking for educators."
+      "title": "Brand Marketing",
+      "description": "Logo, colour palette, and social presence — everything you need to look professional and be remembered."
+    }
+  },
+  "Academy": {
+    "tag": "Aura Academy",
+    "heading": "Real skills for college students.",
+    "subheading": "Built for college students who want to work on real projects — not just theory. Learn by doing, in a real environment, guided by working developers.",
+    "ctaButton": "Join the Program",
+    "item0": {
+      "name": "Master DSA",
+      "description": "Build a solid foundation in Data Structures and Algorithms — the core skill every developer interview tests. Solve real problems, not just textbook exercises."
+    },
+    "item1": {
+      "name": "Security Analyst",
+      "description": "Learn how to find and fix vulnerabilities. Understand web security, network threats, and how to think like an attacker to defend like a pro."
+    },
+    "item2": {
+      "name": "AI Integration",
+      "description": "Go beyond theory — learn to build real AI-powered features. Connect LLMs to apps, automate tasks, and ship working AI tools."
     },
     "item3": {
-      "title": "Online Course Tools",
-      "description": "Interactive quizzes, lesson schedulers, and certificate systems — everything students and teachers need."
+      "name": "Interview Preparation Guidance",
+      "description": "Get structured, personalised guidance to crack technical interviews. Mock sessions, feedback, and a roadmap built around your gaps."
     },
-    "item4": {
-      "title": "Brand Identity & Design",
-      "description": "Logo systems, colour palettes, and style guides that make your brand instantly recognisable."
-    },
-    "item5": {
-      "title": "Digital Marketing & SEO",
-      "description": "SEO-optimised landing pages, social media content, and campaign analytics to grow your audience."
-    }
+    "advantageHeading": "Built for college students.",
+    "advantage0Title": "Real Environment",
+    "advantage0Desc": "Work on actual projects, not toy examples. You write code that runs in production.",
+    "advantage1Title": "Hands-on Learning",
+    "advantage1Desc": "Every concept is taught by building something real — no slides-only sessions.",
+    "advantage2Title": "Mentor Guidance",
+    "advantage2Desc": "Get direct support from working developers who understand what the industry actually needs."
   },
   "Process": {
     "heading": "How we deliver.",
@@ -195,6 +213,14 @@
     "item6": {
       "question": "Can you help with digital marketing and growth?",
       "answer": "Absolutely. We build the technical infrastructure behind marketing — SEO-optimised landing pages, email automation pipelines, analytics dashboards, CRM integrations, and ad performance tracking. We bridge the gap between engineering and marketing."
+    },
+    "item7": {
+      "question": "Who is eligible for your training and academy programs?",
+      "answer": "Our programs are designed for engineering students, self-taught developers, and junior professionals looking to bridge the gap between academic theory and professional enterprise software engineering."
+    },
+    "item8": {
+      "question": "Do students work on real commercial client projects?",
+      "answer": "Yes, top-performing students in our advanced cohorts are offered paid internships where they pair-program with our senior engineers and contribute directly to live, production-grade projects."
     }
   },
   "Cta": {

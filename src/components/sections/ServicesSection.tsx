@@ -3,9 +3,8 @@
 import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/motion";
-import { ShoppingCart, FileText, Megaphone, BarChart3, Palette, Globe, Code2, Zap, ArrowRight } from "lucide-react";
+import { ShoppingCart, FileText, Megaphone, BarChart3, Palette, Globe, Code2, Zap } from "lucide-react";
 import { useTranslations, useLocale } from "next-intl";
-import { scrollToSection } from "@/lib/utils";
 import type { Service } from "@/lib/supabase";
 
 const ICON_MAP: Record<string, React.ElementType> = {
@@ -102,16 +101,6 @@ export function ServicesSection({ services = [] }: Props) {
                     </div>
                     <h3 className="font-outfit text-lg font-semibold mb-2 text-foreground">{title}</h3>
                     <p className="text-muted-foreground leading-relaxed text-sm">{description}</p>
-                    <motion.button
-                      onClick={() => scrollToSection("cta")}
-                      className={`mt-6 flex items-center gap-1 text-sm font-medium ${cfg.color} cursor-pointer`}
-                      whileHover="hover"
-                    >
-                      {t("learnMore")}
-                      <motion.span variants={{ hover: { x: 4 } }} transition={{ type: "spring", stiffness: 400, damping: 20 }}>
-                        <ArrowRight className="w-4 h-4" />
-                      </motion.span>
-                    </motion.button>
                   </div>
                 </div>
               </TiltCard>

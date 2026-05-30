@@ -30,7 +30,7 @@ export function Footer({ config = {} }: Props) {
   const iconCls = "p-2 rounded-full border border-border hover:border-primary hover:text-primary transition-colors text-muted-foreground";
 
   return (
-    <footer className="w-full border-t border-border/50 bg-background pt-16 pb-8 px-6 lg:px-12 relative z-10 overflow-hidden">
+    <footer id="contact" className="w-full border-t border-border/50 bg-background pt-16 pb-8 px-6 lg:px-12 relative z-10 overflow-hidden">
       <div className="w-full max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
 
         {/* Brand + contact */}

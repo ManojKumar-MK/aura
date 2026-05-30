@@ -44,7 +44,7 @@ export function HeroSection({ config = {} }: Props) {
       <StaggerContainer className="relative z-10 container mx-auto px-6 text-center max-w-5xl">
         <StaggerItem>
           <button
-            onClick={() => scrollToSection("cta")}
+            onClick={() => scrollToSection("contact")}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-muted/50 border border-border/50 text-sm font-medium text-muted-foreground mb-8 cursor-pointer hover:bg-muted transition-colors text-left"
           >
             <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse"></span>
@@ -66,7 +66,7 @@ export function HeroSection({ config = {} }: Props) {
         </StaggerItem>
 
         <StaggerItem className="flex flex-col sm:flex-row items-center justify-center gap-6">
-          <MagneticButton onClick={() => scrollToSection("cta")}>
+          <MagneticButton onClick={() => scrollToSection("contact")}>
             {ctaPrimary} <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </MagneticButton>
           <MagneticButton variant="outline" onClick={() => scrollToSection("academy")}>

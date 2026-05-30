@@ -14,7 +14,7 @@ export function FaqSection({ faqs = [] }: Props) {
 
   const items = faqs.length > 0
     ? faqs.map((f) => ({ question: f.question, answer: f.answer }))
-    : [0, 1, 2, 3, 4, 5, 6, 7, 8].map((i) => ({
+    : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => ({
         question: t(`item${i}.question`),
         answer:   t(`item${i}.answer`),
       }));

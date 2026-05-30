@@ -3,8 +3,8 @@
 import { FadeIn, SlideUp, StaggerContainer, StaggerItem } from "@/components/ui/motion";
 import { useTranslations, useLocale } from "next-intl";
 import { Code2, Shield, Brain, Mic, Terminal, BookOpen, UserCheck, Briefcase, ArrowRight } from "lucide-react";
-import { scrollToSection } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { useContactModal } from "@/components/ui/contact-modal";
 import type { AcademyProgram } from "@/lib/supabase";
 
 const ICON_MAP: Record<string, React.ElementType> = {
@@ -24,8 +24,8 @@ interface Props {
 
 export function AcademySection({ programs = [] }: Props) {
   const t = useTranslations("Academy");
-
   const locale = useLocale();
+  const { open: openContactModal } = useContactModal();
 
   const items = programs.length > 0
     ? programs.map((p, i) => ({
@@ -94,7 +94,7 @@ export function AcademySection({ programs = [] }: Props) {
             </p>
             <div className="pt-2">
               <Button
-                onClick={() => scrollToSection("cta")}
+                onClick={() => openContactModal()}
                 className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-7 py-5 font-bold flex items-center gap-2 group shadow-md shadow-primary/20"
               >
                 {t("ctaButton")}

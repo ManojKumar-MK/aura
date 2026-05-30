@@ -7,6 +7,7 @@ import { Menu, X, Hexagon, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTranslations, useLocale } from "next-intl";
 import { scrollToSection } from "@/lib/utils";
+import { useContactModal } from "@/components/ui/contact-modal";
 
 interface Props {
   config?: Record<string, string>;
@@ -15,6 +16,7 @@ interface Props {
 export function Navbar({ config = {} }: Props) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { open: openContactModal } = useContactModal();
   const { scrollY } = useScroll();
   const t = useTranslations("Navbar");
   const locale = useLocale();
@@ -80,7 +82,7 @@ export function Navbar({ config = {} }: Props) {
 
           <Button
             className="hidden md:inline-flex bg-foreground text-background hover:bg-primary transition-colors"
-            onClick={() => scrollToSection("cta")}
+            onClick={() => openContactModal()}
           >
             {t("startProject")}
           </Button>
@@ -105,7 +107,7 @@ export function Navbar({ config = {} }: Props) {
               {link.name}
             </button>
           ))}
-          <Button className="w-full bg-foreground text-background" onClick={() => { scrollToSection("cta"); setMobileMenuOpen(false); }}>
+          <Button className="w-full bg-foreground text-background" onClick={() => { openContactModal(); setMobileMenuOpen(false); }}>
             {t("startProject")}
           </Button>
         </motion.div>

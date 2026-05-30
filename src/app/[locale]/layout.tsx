@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import type { Metadata } from "next";
 import { Inter, Outfit } from "next/font/google";
 import "../globals.css";
@@ -7,6 +9,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { ChatbotWidget } from "@/components/ui/chatbot";
+import { getSiteConfig } from "@/lib/supabase";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -32,7 +35,10 @@ export default async function RootLayout({
 }>) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const messages = await getMessages();
+  const [messages, siteConfig] = await Promise.all([
+    getMessages(),
+    getSiteConfig().catch(() => ({} as Record<string, string>)),
+  ]);
 
   return (
     <html lang={locale} className={`dark ${inter.variable} ${outfit.variable}`} suppressHydrationWarning>
@@ -40,10 +46,10 @@ export default async function RootLayout({
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
             <div className="bg-noise mix-blend-overlay"></div>
-            <Navbar />
+            {siteConfig.show_navbar !== "false" && <Navbar config={siteConfig} />}
             <main className="flex-1 w-full bg-background relative z-10">{children}</main>
-            <ChatbotWidget />
-            <Footer />
+            <ChatbotWidget config={siteConfig} />
+            <Footer config={siteConfig} />
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>

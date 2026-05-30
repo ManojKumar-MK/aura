@@ -7,11 +7,12 @@ import {
   Save, Plus, Trash2, Eye, EyeOff, LogOut, ExternalLink,
   CheckCircle2, Loader2, AlertTriangle, Hexagon, ChevronRight,
   Trophy, Star, Link2, Mail, MessageCircle, Sparkles, Layers, Inbox, Circle,
+  Users, UserPlus, Shield, ChevronDown,
 } from "lucide-react";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import type { Service, AcademyProgram, CaseStudy, Testimonial } from "@/lib/supabase";
 
-type Tab = "hero" | "services" | "academy" | "faq" | "casestudies" | "testimonials" | "footer" | "contact" | "chatbot" | "layout" | "submissions";
+type Tab = "hero" | "services" | "academy" | "faq" | "casestudies" | "testimonials" | "footer" | "contact" | "chatbot" | "layout" | "submissions" | "team";
 type FaqItem = { id: string; question: string; answer: string; display_order: number; is_visible: boolean };
 type HeroConfig = {
   heading: string; subheading: string; badge: string; cta_primary: string; cta_secondary: string;
@@ -900,6 +901,9 @@ function ChatbotTab() {
           <Field label="Contact email (shown in bot replies)" value={cfg.chatbot_contact_email} onChange={set("chatbot_contact_email")} />
         </div>
       </AdminCard>
+
+      <InquiryOptionsManager />
+
       <div className="flex justify-end">
         <SaveBtn onClick={save} saving={saving} saved={saved} />
       </div>
@@ -1270,9 +1274,10 @@ function InquiryOptionsManager() {
   );
 }
 
-function SubmissionsTab() {
-  const [items, setItems] = useState<Submission[]>([]);
-  const [loading, setLoading] = useState(true);
+function SubmissionsTab({ onUnreadChange }: { onUnreadChange?: (n: number) => void }) {
+  const [items,    setItems]    = useState<Submission[]>([]);
+  const [loading,  setLoading]  = useState(true);
+  const [expanded, setExpanded] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -1280,54 +1285,89 @@ function SubmissionsTab() {
       .from("contact_submissions")
       .select("*")
       .order("created_at", { ascending: false });
-    if (data) setItems(data);
+    if (data) {
+      setItems(data);
+      const unreadN = data.filter((s: Submission) => !s.is_read).length;
+      onUnreadChange?.(unreadN);
+    }
     setLoading(false);
-  }, []);
+  }, [onUnreadChange]);
 
   useEffect(() => { load(); }, [load]);
 
   const markRead = async (id: string, is_read: boolean) => {
-    setItems(prev => prev.map(s => s.id === id ? { ...s, is_read } : s));
+    const updated = items.map(s => s.id === id ? { ...s, is_read } : s);
+    setItems(updated);
+    onUnreadChange?.(updated.filter(s => !s.is_read).length);
     await supabase.from("contact_submissions").update({ is_read }).eq("id", id);
   };
 
   const deleteOne = async (id: string) => {
+    const updated = items.filter(s => s.id !== id);
+    setItems(updated);
+    onUnreadChange?.(updated.filter(s => !s.is_read).length);
     await supabase.from("contact_submissions").delete().eq("id", id);
-    setItems(prev => prev.filter(s => s.id !== id));
+    if (expanded === id) setExpanded(null);
+  };
+
+  // Auto-mark as read when expanded
+  const toggle = (id: string, isRead: boolean) => {
+    if (expanded === id) { setExpanded(null); return; }
+    setExpanded(id);
+    if (!isRead) markRead(id, true);
+  };
+
+  const markAllRead = async () => {
+    const unreadIds = items.filter(s => !s.is_read).map(s => s.id);
+    if (!unreadIds.length) return;
+    setItems(prev => prev.map(s => ({ ...s, is_read: true })));
+    onUnreadChange?.(0);
+    await supabase.from("contact_submissions").update({ is_read: true }).in("id", unreadIds);
   };
 
   const unread = items.filter(s => !s.is_read).length;
+  const total  = items.length;
 
   return (
     <motion.div variants={staggerList} animate="animate" className="space-y-4">
-      <InquiryOptionsManager />
-
-      {/* Summary */}
-      <AdminCard>
-        <div className="flex items-center justify-between">
-          <div>
-            <h3 className="font-outfit font-semibold text-foreground text-sm">Contact Submissions</h3>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              {loading ? "Loading…" : `${items.length} total · ${unread} unread`}
-            </p>
+      {/* Stats bar */}
+      <div className="grid grid-cols-3 gap-3">
+        {[
+          { label: "Total",  value: total,        color: "text-foreground",    bg: "bg-muted/40"       },
+          { label: "Unread", value: unread,        color: "text-primary",       bg: "bg-primary/10"     },
+          { label: "Read",   value: total - unread, color: "text-green-400",   bg: "bg-green-500/10"   },
+        ].map(s => (
+          <div key={s.label} className={`${s.bg} rounded-2xl p-4 border border-border/40 text-center`}>
+            <p className={`font-outfit text-2xl font-bold ${s.color}`}>{s.value}</p>
+            <p className="text-xs text-muted-foreground mt-0.5">{s.label}</p>
           </div>
-          <div className="flex items-center gap-3">
-            {unread > 0 && (
-              <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-primary/15 text-primary border border-primary/20">
-                {unread} new
-              </span>
-            )}
-            <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-              onClick={load}
-              className="text-xs px-3 py-1.5 rounded-lg bg-muted hover:bg-border border border-border/50 text-muted-foreground hover:text-foreground transition-colors"
+        ))}
+      </div>
+
+      {/* Actions */}
+      <div className="flex items-center justify-between">
+        <p className="text-sm text-muted-foreground">
+          {loading ? "Loading…" : unread > 0 ? `${unread} unread message${unread > 1 ? "s" : ""}` : "All caught up!"}
+        </p>
+        <div className="flex items-center gap-2">
+          {unread > 0 && (
+            <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
+              onClick={markAllRead}
+              className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-green-500/10 text-green-400 border border-green-500/20 hover:bg-green-500/20 transition-colors"
             >
-              Refresh
+              <CheckCircle2 className="w-3.5 h-3.5" /> Mark all read
             </motion.button>
-          </div>
+          )}
+          <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
+            onClick={load}
+            className="text-xs px-3 py-1.5 rounded-lg bg-muted hover:bg-border border border-border/50 text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Refresh
+          </motion.button>
         </div>
-      </AdminCard>
+      </div>
 
-      {/* List */}
+      {/* Message list */}
       {loading ? (
         <div className="flex justify-center py-12">
           <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
@@ -1335,59 +1375,287 @@ function SubmissionsTab() {
       ) : items.length === 0 ? (
         <div className="text-center py-16 text-muted-foreground text-sm">
           <Inbox className="w-10 h-10 mx-auto mb-3 opacity-30" />
-          No submissions yet. They will appear here when someone fills out the contact form.
+          No submissions yet.
         </div>
       ) : (
-        items.map((s, i) => (
-          <AdminCard key={s.id} index={i}>
-            <div className="flex items-start justify-between gap-4">
-              <div className="flex items-center gap-2 shrink-0">
-                {!s.is_read && (
-                  <Circle className="w-2 h-2 fill-primary text-primary shrink-0 mt-0.5" />
-                )}
-                <div>
-                  <p className={`font-outfit font-semibold text-sm ${s.is_read ? "text-muted-foreground" : "text-foreground"}`}>
-                    {s.name || "Anonymous"}
-                  </p>
-                  <a href={`mailto:${s.email}`} className="text-xs text-primary hover:underline">
-                    {s.email}
-                  </a>
+        items.map((s, i) => {
+          const isExpanded = expanded === s.id;
+          return (
+            <motion.div
+              key={s.id}
+              variants={cardVariant}
+              initial="initial"
+              animate="animate"
+              transition={{ delay: i * 0.04 }}
+              className={`relative group card-glow rounded-2xl border overflow-hidden transition-all duration-300 ${
+                s.is_read ? "bg-card border-border/40" : "bg-card border-primary/30 shadow-sm shadow-primary/10"
+              }`}
+            >
+              {/* Unread accent */}
+              {!s.is_read && <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary to-accent rounded-l-2xl" />}
+
+              {/* Header row — click to expand */}
+              <button
+                onClick={() => toggle(s.id, s.is_read)}
+                className="w-full flex items-center gap-3 px-5 py-4 text-left"
+              >
+                {/* Unread dot */}
+                <div className="shrink-0 w-5 flex items-center justify-center">
+                  {!s.is_read
+                    ? <Circle className="w-2 h-2 fill-primary text-primary" />
+                    : <CheckCircle2 className="w-3.5 h-3.5 text-muted-foreground/30" />}
                 </div>
+
+                {/* Name + email */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <p className={`font-outfit font-semibold text-sm ${s.is_read ? "text-muted-foreground" : "text-foreground"}`}>
+                      {s.name || "Anonymous"}
+                    </p>
+                    {!s.is_read && (
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-primary/15 text-primary">New</span>
+                    )}
+                  </div>
+                  <p className="text-xs text-muted-foreground truncate">{s.email}</p>
+                </div>
+
+                {/* Time + chevron */}
+                <div className="flex items-center gap-2 shrink-0">
+                  <span className="text-xs text-muted-foreground/60 hidden sm:block">
+                    {new Date(s.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}
+                  </span>
+                  <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform duration-200 ${isExpanded ? "rotate-180" : ""}`} />
+                </div>
+              </button>
+
+              {/* Expanded content */}
+              <AnimatePresence>
+                {isExpanded && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                    className="overflow-hidden"
+                  >
+                    <div className="px-5 pb-5 pt-1 border-t border-border/40">
+                      {s.message ? (
+                        <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line border-l-2 border-primary/30 pl-3 my-3">
+                          {s.message}
+                        </p>
+                      ) : (
+                        <p className="text-sm text-muted-foreground/50 italic my-3">No message provided.</p>
+                      )}
+
+                      <div className="flex items-center gap-2 mt-4 flex-wrap">
+                        <motion.button
+                          whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
+                          onClick={() => markRead(s.id, !s.is_read)}
+                          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors border ${
+                            s.is_read
+                              ? "bg-muted/40 text-muted-foreground border-border/40 hover:bg-muted"
+                              : "bg-green-500/10 text-green-400 border-green-500/20 hover:bg-green-500/20"
+                          }`}
+                        >
+                          <CheckCircle2 className="w-3.5 h-3.5" />
+                          {s.is_read ? "Mark unread" : "Mark as read"}
+                        </motion.button>
+
+                        <a
+                          href={`mailto:${s.email}?subject=Re: Your enquiry`}
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors"
+                        >
+                          <Mail className="w-3.5 h-3.5" /> Reply
+                        </a>
+
+                        <DeleteBtn onClick={() => deleteOne(s.id)} />
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          );
+        })
+      )}
+    </motion.div>
+  );
+}
+
+// ── Team tab ──────────────────────────────────────────────────────────────────
+
+type TeamMember = { id: string; name: string; email: string; role: string; is_active: boolean; created_at: string };
+
+function TeamTab() {
+  const [members, setMembers] = useState<TeamMember[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [showAdd,  setShowAdd]  = useState(false);
+  const [newName,  setNewName]  = useState("");
+  const [newEmail, setNewEmail] = useState("");
+  const [newRole,  setNewRole]  = useState("admin");
+  const [adding,   setAdding]   = useState(false);
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    const { data } = await supabase.from("team_members").select("*").order("created_at");
+    if (data) setMembers(data);
+    setLoading(false);
+  }, []);
+
+  useEffect(() => { load(); }, [load]);
+
+  const addMember = async () => {
+    if (!newName.trim() || !newEmail.trim()) return;
+    setAdding(true);
+    const { data } = await supabase.from("team_members").insert({
+      name: newName.trim(), email: newEmail.trim(), role: newRole, is_active: true,
+    }).select().single();
+    if (data) setMembers(prev => [...prev, data]);
+    setNewName(""); setNewEmail(""); setNewRole("admin"); setShowAdd(false);
+    setAdding(false);
+  };
+
+  const toggleActive = async (id: string, is_active: boolean) => {
+    setMembers(prev => prev.map(m => m.id === id ? { ...m, is_active } : m));
+    await supabase.from("team_members").update({ is_active }).eq("id", id);
+  };
+
+  const changeRole = async (id: string, role: string) => {
+    setMembers(prev => prev.map(m => m.id === id ? { ...m, role } : m));
+    await supabase.from("team_members").update({ role }).eq("id", id);
+  };
+
+  const removeMember = async (id: string) => {
+    await supabase.from("team_members").delete().eq("id", id);
+    setMembers(prev => prev.filter(m => m.id !== id));
+  };
+
+  const inputCls = "px-4 py-2.5 rounded-xl bg-muted/40 border border-border/60 text-foreground text-sm focus:outline-none focus:border-primary/60 focus:ring-2 focus:ring-primary/15 transition-all font-sans";
+
+  return (
+    <motion.div variants={staggerList} animate="animate" className="space-y-4">
+
+      {/* Info card */}
+      <AdminCard>
+        <div className="flex items-start gap-4">
+          <div className="p-3 rounded-xl bg-primary/10 border border-primary/20 shrink-0">
+            <Shield className="w-5 h-5 text-primary" />
+          </div>
+          <div className="flex-1">
+            <h3 className="font-outfit font-semibold text-foreground text-sm mb-1">Admin Access</h3>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              Team members listed here share the same admin password set in your <code className="font-mono bg-muted px-1 rounded">ADMIN_PASSWORD</code> env variable. Add members to track who has access and their roles.
+            </p>
+          </div>
+        </div>
+      </AdminCard>
+
+      {/* Add member */}
+      <AnimatePresence>
+        {showAdd && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.25 }}
+          >
+            <AdminCard>
+              <h3 className="font-outfit font-semibold text-foreground mb-5 flex items-center gap-2">
+                <UserPlus className="w-4 h-4 text-primary" /> Add Team Member
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+                <input value={newName}  onChange={e => setNewName(e.target.value)}  placeholder="Full name"  className={`${inputCls} w-full`} />
+                <input value={newEmail} onChange={e => setNewEmail(e.target.value)} placeholder="Email"      className={`${inputCls} w-full`} type="email" />
+                <select value={newRole} onChange={e => setNewRole(e.target.value)}  className={`${inputCls} w-full`}>
+                  <option value="admin">Admin — full access</option>
+                  <option value="viewer">Viewer — read only</option>
+                </select>
               </div>
-              <span className="text-xs text-muted-foreground/60 shrink-0">
-                {new Date(s.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" })}
-              </span>
-            </div>
+              <div className="flex gap-2">
+                <motion.button onClick={addMember} disabled={adding || !newName.trim() || !newEmail.trim()}
+                  whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-semibold disabled:opacity-60 transition-colors hover:bg-primary/90 shadow-md shadow-primary/20"
+                >
+                  {adding ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+                  {adding ? "Adding…" : "Add Member"}
+                </motion.button>
+                <button onClick={() => setShowAdd(false)} className="px-4 py-2.5 rounded-xl text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors">
+                  Cancel
+                </button>
+              </div>
+            </AdminCard>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-            {s.message && (
-              <p className="mt-3 text-sm text-muted-foreground leading-relaxed border-l-2 border-border/50 pl-3">
-                {s.message}
-              </p>
-            )}
+      {/* Member list header */}
+      <div className="flex items-center justify-between">
+        <p className="text-sm text-muted-foreground">{loading ? "Loading…" : `${members.length} team member${members.length !== 1 ? "s" : ""}`}</p>
+        {!showAdd && (
+          <motion.button onClick={() => setShowAdd(true)} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 transition-colors shadow-md shadow-primary/20"
+          >
+            <UserPlus className="w-3.5 h-3.5" /> Invite Member
+          </motion.button>
+        )}
+      </div>
 
-            <div className="flex items-center gap-3 mt-4 pt-4 border-t border-border/40">
-              <motion.button
-                whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
-                onClick={() => markRead(s.id, !s.is_read)}
-                className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-medium transition-colors border ${
-                  s.is_read
-                    ? "bg-muted/40 text-muted-foreground border-border/40 hover:bg-muted"
-                    : "bg-green-500/10 text-green-400 border-green-500/20 hover:bg-green-500/20"
-                }`}
-              >
-                <CheckCircle2 className="w-3.5 h-3.5" />
-                {s.is_read ? "Mark unread" : "Mark as read"}
-              </motion.button>
+      {/* Members */}
+      {loading ? (
+        <div className="flex justify-center py-12"><Loader2 className="w-5 h-5 animate-spin text-muted-foreground" /></div>
+      ) : members.length === 0 ? (
+        <div className="text-center py-16 text-muted-foreground text-sm">
+          <Users className="w-10 h-10 mx-auto mb-3 opacity-30" />
+          No team members yet. Click "Invite Member" to add someone.
+        </div>
+      ) : (
+        members.map((m, i) => (
+          <AdminCard key={m.id} index={i}>
+            <div className="flex items-center gap-4">
+              {/* Avatar */}
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/30 to-accent/30 border border-border/50 flex items-center justify-center shrink-0">
+                <span className="font-outfit font-bold text-sm text-foreground">
+                  {m.name.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase()}
+                </span>
+              </div>
 
-              <a
-                href={`mailto:${s.email}?subject=Re: Your enquiry`}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-medium bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors"
-              >
-                <Mail className="w-3.5 h-3.5" />
-                Reply
-              </a>
+              {/* Info */}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <p className={`font-outfit font-semibold text-sm ${m.is_active ? "text-foreground" : "text-muted-foreground"}`}>{m.name}</p>
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
+                    m.role === "admin"
+                      ? "bg-primary/10 text-primary border-primary/20"
+                      : "bg-muted text-muted-foreground border-border/40"
+                  }`}>
+                    {m.role === "admin" ? "Admin" : "Viewer"}
+                  </span>
+                  {!m.is_active && (
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-destructive/10 text-destructive border border-destructive/20">Inactive</span>
+                  )}
+                </div>
+                <p className="text-xs text-muted-foreground truncate">{m.email}</p>
+              </div>
 
-              <DeleteBtn onClick={() => deleteOne(s.id)} />
+              {/* Actions */}
+              <div className="flex items-center gap-2 shrink-0">
+                <select
+                  value={m.role}
+                  onChange={e => changeRole(m.id, e.target.value)}
+                  className="text-xs px-2 py-1.5 rounded-lg bg-muted/40 border border-border/50 text-muted-foreground focus:outline-none focus:border-primary/50 transition-colors"
+                >
+                  <option value="admin">Admin</option>
+                  <option value="viewer">Viewer</option>
+                </select>
+
+                <VisibilityToggle visible={m.is_active} onChange={v => toggleActive(m.id, v)} />
+
+                <motion.button
+                  whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+                  onClick={() => removeMember(m.id)}
+                  className="p-1.5 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </motion.button>
+              </div>
             </div>
           </AdminCard>
         ))
@@ -1398,32 +1666,80 @@ function SubmissionsTab() {
 
 // ── Tab config ────────────────────────────────────────────────────────────────
 
-const TABS: { id: Tab; label: string; icon: React.ElementType; desc: string }[] = [
-  { id: "layout",       label: "Page Layout",  icon: Layers,          desc: "Section order & visibility" },
-  { id: "hero",         label: "Hero",         icon: LayoutTemplate,  desc: "Banner, heading & CTAs" },
-  { id: "services",     label: "Services",     icon: ShoppingCart,    desc: "What you offer" },
-  { id: "academy",      label: "Academy",      icon: GraduationCap,   desc: "Programs & courses" },
-  { id: "casestudies",  label: "Impact",       icon: Trophy,          desc: "Proven impact / case studies" },
-  { id: "testimonials", label: "Testimonials", icon: Star,            desc: "Trusted by the best" },
-  { id: "faq",          label: "FAQ",          icon: HelpCircle,      desc: "Common questions" },
-  { id: "submissions",  label: "Inbox",        icon: Inbox,           desc: "Contact form submissions" },
-  { id: "footer",       label: "Footer",       icon: Link2,           desc: "Tagline, email & social links" },
-  { id: "chatbot",      label: "Chatbot",      icon: MessageCircle,   desc: "Chat widget settings" },
+const TABS: { id: Tab; label: string; icon: React.ElementType; desc: string; section?: string }[] = [
+  { id: "submissions",  label: "Inbox",        icon: Inbox,           desc: "Contact form submissions",     section: "Communication" },
+  { id: "team",         label: "Team",         icon: Users,           desc: "Members & access roles",       section: "Communication" },
+  { id: "layout",       label: "Page Layout",  icon: Layers,          desc: "Section order & visibility",   section: "Content" },
+  { id: "hero",         label: "Hero",         icon: LayoutTemplate,  desc: "Banner, heading & CTAs",       section: "Content" },
+  { id: "services",     label: "Services",     icon: ShoppingCart,    desc: "What you offer",               section: "Content" },
+  { id: "academy",      label: "Academy",      icon: GraduationCap,   desc: "Programs & courses",           section: "Content" },
+  { id: "casestudies",  label: "Impact",       icon: Trophy,          desc: "Proven impact / case studies", section: "Content" },
+  { id: "testimonials", label: "Testimonials", icon: Star,            desc: "Trusted by the best",          section: "Content" },
+  { id: "faq",          label: "FAQ",          icon: HelpCircle,      desc: "Common questions",             section: "Content" },
+  { id: "footer",       label: "Footer",       icon: Link2,           desc: "Tagline, email & social links",section: "Settings" },
+  { id: "chatbot",      label: "Chatbot",      icon: MessageCircle,   desc: "Chat widget settings",         section: "Settings" },
 ];
 
 // ── Main page ─────────────────────────────────────────────────────────────────
 
 export default function AdminPage() {
-  const [authed, setAuthed] = useState(false);
-  const [tab, setTab] = useState<Tab>("layout");
+  const [authed,      setAuthed]      = useState(false);
+  const [tab,         setTab]         = useState<Tab>("submissions");
+  const [unreadCount, setUnreadCount] = useState(0);
 
   useEffect(() => {
     if (sessionStorage.getItem("admin_authed") === "1") setAuthed(true);
+    // Fetch initial unread count
+    supabase.from("contact_submissions").select("id", { count: "exact", head: true })
+      .eq("is_read", false)
+      .then(({ count }) => { if (count !== null) setUnreadCount(count); });
   }, []);
 
   if (!authed) return <LoginScreen onLogin={() => setAuthed(true)} />;
 
   const activeTab = TABS.find((t) => t.id === tab)!;
+  const sections  = [...new Set(TABS.map(t => t.section))];
+
+  const SidebarNav = () => (
+    <nav className="flex-1 px-3 py-4 overflow-y-auto space-y-4">
+      {sections.map(section => (
+        <div key={section}>
+          <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/50 px-3 mb-1.5">{section}</p>
+          <div className="space-y-0.5">
+            {TABS.filter(t => t.section === section).map((t) => {
+              const Icon   = t.icon;
+              const active = tab === t.id;
+              const badge  = t.id === "submissions" && unreadCount > 0 ? unreadCount : 0;
+              return (
+                <motion.button
+                  key={t.id}
+                  onClick={() => setTab(t.id)}
+                  whileHover={{ x: 2 }}
+                  className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all duration-200 group overflow-hidden ${
+                    active ? "bg-primary/10 text-primary border border-primary/20"
+                           : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
+                  }`}
+                >
+                  {active && <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 rounded-full bg-gradient-to-b from-primary to-accent" />}
+                  <Icon className={`w-4 h-4 shrink-0 ${active ? "text-primary" : "text-muted-foreground group-hover:text-foreground"}`} />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium leading-none mb-0.5">{t.label}</p>
+                    <p className={`text-xs truncate ${active ? "text-primary/70" : "text-muted-foreground/60"}`}>{t.desc}</p>
+                  </div>
+                  {badge > 0 && (
+                    <span className="min-w-[20px] h-5 px-1.5 rounded-full bg-primary text-primary-foreground text-[10px] font-bold flex items-center justify-center shrink-0">
+                      {badge > 99 ? "99+" : badge}
+                    </span>
+                  )}
+                  {active && !badge && <ChevronRight className="w-3.5 h-3.5 text-primary shrink-0" />}
+                </motion.button>
+              );
+            })}
+          </div>
+        </div>
+      ))}
+    </nav>
+  );
 
   return (
     <div className="min-h-screen flex">
@@ -1433,47 +1749,25 @@ export default function AdminPage() {
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-48 h-48 bg-primary/20 rounded-full blur-[80px] opacity-30 pointer-events-none" />
         {/* Logo */}
         <div className="px-6 py-6 border-b border-border/40">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-xl bg-primary/10 border border-primary/20">
-              <Hexagon className="w-5 h-5 text-primary" />
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-xl bg-primary/10 border border-primary/20">
+                <Hexagon className="w-5 h-5 text-primary" />
+              </div>
+              <div>
+                <p className="font-outfit font-bold text-sm"><span className="text-gradient">Aura Admin</span></p>
+                <p className="text-xs text-muted-foreground">Content panel</p>
+              </div>
             </div>
-            <div>
-              <p className="font-outfit font-bold text-sm"><span className="text-gradient">Aura Admin</span></p>
-              <p className="text-xs text-muted-foreground">Content panel</p>
-            </div>
+            {unreadCount > 0 && (
+              <span className="min-w-[22px] h-[22px] px-1.5 rounded-full bg-primary text-primary-foreground text-[10px] font-bold flex items-center justify-center animate-pulse">
+                {unreadCount > 99 ? "99+" : unreadCount}
+              </span>
+            )}
           </div>
         </div>
 
-        {/* Nav */}
-        <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-          <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground/60 px-3 mb-3">Sections</p>
-          {TABS.map((t) => {
-            const Icon = t.icon;
-            const active = tab === t.id;
-            return (
-              <motion.button
-                key={t.id}
-                onClick={() => setTab(t.id)}
-                whileHover={{ x: 2 }}
-                className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all duration-200 group overflow-hidden ${
-                  active
-                    ? "bg-primary/10 text-primary border border-primary/20"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
-                }`}
-              >
-                {active && (
-                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 rounded-full bg-gradient-to-b from-primary to-accent" />
-                )}
-                <Icon className={`w-4 h-4 shrink-0 ${active ? "text-primary" : "text-muted-foreground group-hover:text-foreground"}`} />
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium leading-none mb-0.5">{t.label}</p>
-                  <p className={`text-xs truncate ${active ? "text-primary/70" : "text-muted-foreground/60"}`}>{t.desc}</p>
-                </div>
-                {active && <ChevronRight className="w-3.5 h-3.5 text-primary shrink-0" />}
-              </motion.button>
-            );
-          })}
-        </nav>
+        <SidebarNav />
 
         {/* Footer */}
         <div className="px-3 py-4 border-t border-border/40 space-y-1">
@@ -1544,7 +1838,7 @@ export default function AdminPage() {
               transition={{ duration: 0.25 }}
             >
               <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2 font-medium">
-                <span>Content</span>
+                <span>{activeTab.section ?? "Content"}</span>
                 <ChevronRight className="w-3.5 h-3.5" />
                 <span className="text-foreground">{activeTab.label}</span>
               </div>
@@ -1565,7 +1859,8 @@ export default function AdminPage() {
               exit="exit"
             >
               {tab === "layout"       && <LayoutTab onNavigate={setTab} />}
-              {tab === "submissions"  && <SubmissionsTab />}
+              {tab === "submissions"  && <SubmissionsTab onUnreadChange={setUnreadCount} />}
+              {tab === "team"         && <TeamTab />}
               {tab === "hero"         && <HeroTab />}
               {tab === "services"     && <ServicesTab />}
               {tab === "academy"      && <AcademyTab />}

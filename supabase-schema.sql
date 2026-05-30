@@ -135,3 +135,15 @@ create policy "public insert submissions" on contact_submissions for insert with
 create policy "anon read submissions"   on contact_submissions for select using (true);
 create policy "anon update submissions" on contact_submissions for update using (true) with check (true);
 create policy "anon delete submissions" on contact_submissions for delete using (true);
+
+-- ── Team members (admin users) ──────────────────────────────────────────────
+create table if not exists team_members (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  email text not null,
+  role text not null default 'admin',
+  is_active boolean not null default true,
+  created_at timestamptz default now()
+);
+alter table team_members enable row level security;
+create policy "anon all team_members" on team_members for all using (true) with check (true);

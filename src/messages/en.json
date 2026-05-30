@@ -185,42 +185,46 @@
   },
   "Faq": {
     "heading": "Commonly asked questions.",
-    "subheading": "Everything you need to know about working with Aura.",
+    "subheading": "Everything you need to know about our services and academy.",
     "item0": {
-      "question": "Do you only work with enterprise companies?",
-      "answer": "While our infrastructure is built for enterprise scale, we frequently partner with well-funded startups and mid-market companies that require robust, high-performance systems from day one to support rapid scaling."
+      "question": "What services do you offer?",
+      "answer": "We offer four core services: Ecommerce stores for businesses, high-converting Landing Pages, Brand Marketing (logo, colours, social presence), and IT Consulting & Hosting (domain setup, SSL, ongoing support)."
     },
     "item1": {
-      "question": "What is your typical project timeline?",
-      "answer": "Project timelines vary based on complexity, but most initial MVPs or phase-one deliverables are complete within 2 to 3 months. Enterprise migrations or core system rewrites generally span 6 to 12 months with continuous agile delivery."
+      "question": "How long does it take to build an ecommerce store?",
+      "answer": "A standard ecommerce store with product catalogue, cart, and payment integration is typically delivered in 2–3 weeks. More complex stores with custom features take 4–6 weeks."
     },
     "item2": {
-      "question": "How do you handle security and compliance?",
-      "answer": "Security is baked into our CI/CD pipelines. We adhere strictly to SOC 2, HIPAA, or ISO 27001 compliance standards depending on your industry. All code undergoes automated vulnerability scanning and manual peer review."
+      "question": "What is included in a landing page?",
+      "answer": "Every landing page includes mobile-first design, copywriting support, SEO basics, contact form, and fast loading speed. We focus on making it convert — not just look good."
     },
     "item3": {
-      "question": "Will we own the intellectual property (IP)?",
-      "answer": "Yes, absolutely. Once the project is completed and invoices are settled, the intellectual property, source code, and all related assets are entirely yours."
+      "question": "What does Brand Marketing cover?",
+      "answer": "Brand Marketing includes logo design, colour palette, typography, and social media profile setup. You will have everything you need to look professional from day one."
     },
     "item4": {
-      "question": "Do you offer post-launch support and maintenance?",
-      "answer": "Yes, we offer ongoing SLA-backed support contracts that cover DevOps, uptime monitoring, bug fixes, and feature iterations. We never abandon a deployment."
+      "question": "Can you help with hosting and domain setup?",
+      "answer": "Yes. Our IT Consulting & Hosting service covers domain registration, hosting configuration, SSL certificates, email setup, and ongoing technical support so your site stays live and secure."
     },
     "item5": {
-      "question": "Do you build teaching and educational platforms?",
-      "answer": "Yes. We design and build full-featured LMS systems, video course platforms, quiz engines, and student progress dashboards. Whether you're an independent educator or an institution, we tailor the learning experience to your audience."
+      "question": "Who is Aura Academy for?",
+      "answer": "Aura Academy is built for college students who want to move beyond theory and work on real projects. If you know basic programming and want hands-on experience, you are the right fit."
     },
     "item6": {
-      "question": "Can you help with digital marketing and growth?",
-      "answer": "Absolutely. We build the technical infrastructure behind marketing — SEO-optimised landing pages, email automation pipelines, analytics dashboards, CRM integrations, and ad performance tracking. We bridge the gap between engineering and marketing."
+      "question": "What will I learn in the Master DSA program?",
+      "answer": "You will master Data Structures and Algorithms through real problem-solving — arrays, trees, graphs, dynamic programming, and everything technical interviews actually test."
     },
     "item7": {
-      "question": "Who is eligible for your training and academy programs?",
-      "answer": "Our programs are designed for engineering students, self-taught developers, and junior professionals looking to bridge the gap between academic theory and professional enterprise software engineering."
+      "question": "What does the AI Integration program cover?",
+      "answer": "You will learn to build real AI-powered features — connecting LLMs to applications, automating tasks, building chatbots, and shipping working AI tools. Practical, not theoretical."
     },
     "item8": {
-      "question": "Do students work on real commercial client projects?",
-      "answer": "Yes, top-performing students in our advanced cohorts are offered paid internships where they pair-program with our senior engineers and contribute directly to live, production-grade projects."
+      "question": "How does Interview Preparation Guidance work?",
+      "answer": "We provide structured 1-on-1 sessions with mock technical interviews, detailed feedback on your performance, and a personalised roadmap based on your weak areas."
+    },
+    "item9": {
+      "question": "Do I need experience to join the Academy?",
+      "answer": "Basic programming knowledge is helpful but you do not need to be an expert. We will assess where you are and guide you from there. The goal is real growth, not a prerequisite list."
     }
   },
   "Cta": {

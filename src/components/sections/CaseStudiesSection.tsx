@@ -152,7 +152,7 @@ export function CaseStudiesSection({ caseStudies = [] }: Props) {
                 <h3 className="font-outfit text-3xl font-bold text-foreground mt-6 mb-4">{last.title}</h3>
                 {last.description && <p className="text-muted-foreground mb-6">{last.description}</p>}
                 <button
-                  onClick={() => scrollToSection("cta")}
+                  onClick={() => scrollToSection("contact")}
                   className="text-sm font-semibold flex items-center gap-2 group-hover:text-primary transition-colors"
                 >
                   {t("readMore")} <span className="group-hover:translate-x-1 transition-transform">→</span>

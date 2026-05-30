@@ -2,9 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 
 export async function POST(req: NextRequest) {
-  const { name, email, message } = await req.json() as {
+  const { name, email, interest, message } = await req.json() as {
     name?: string;
     email: string;
+    interest?: string;
     message?: string;
   };
 
@@ -12,10 +13,16 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: "Email is required" }, { status: 400 });
   }
 
+  // Prepend interest to message so it's visible even without a DB column
+  const fullMessage = [
+    interest ? `Looking for: ${interest}` : "",
+    message?.trim() ?? "",
+  ].filter(Boolean).join("\n\n");
+
   const { error } = await supabase.from("contact_submissions").insert({
-    name:    name?.trim()    ?? "",
+    name:    name?.trim() ?? "",
     email:   email.trim(),
-    message: message?.trim() ?? "",
+    message: fullMessage,
     is_read: false,
   });
 

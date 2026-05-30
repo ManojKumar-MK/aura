@@ -1157,6 +1157,119 @@ type Submission = {
   created_at: string;
 };
 
+// ── Inquiry options manager (inside Submissions tab) ─────────────────────────
+
+function InquiryOptionsManager() {
+  const [options,    setOptions]    = useState<string[]>([]);
+  const [newOpt,     setNewOpt]     = useState("");
+  const [saving,     setSaving]     = useState(false);
+  const [saved,      setSaved]      = useState(false);
+  const [showEmail,  setShowEmail]  = useState(false);
+  const [emailSaving, setEmailSaving] = useState(false);
+
+  useEffect(() => {
+    supabase.from("site_config").select("key,value")
+      .in("key", ["inquiry_options", "modal_show_email"])
+      .then(({ data }) => {
+        data?.forEach((r: { key: string; value: string }) => {
+          if (r.key === "inquiry_options") {
+            try { setOptions(JSON.parse(r.value) as string[]); } catch { /* ignore */ }
+          }
+          if (r.key === "modal_show_email") setShowEmail(r.value === "true");
+        });
+      });
+  }, []);
+
+  const toggleEmail = async (v: boolean) => {
+    setShowEmail(v);
+    setEmailSaving(true);
+    await supabase.from("site_config").upsert({ key: "modal_show_email", value: v ? "true" : "false" }, { onConflict: "key" });
+    setEmailSaving(false);
+  };
+
+  const save = async (updated: string[]) => {
+    setSaving(true);
+    await supabase.from("site_config").upsert(
+      { key: "inquiry_options", value: JSON.stringify(updated) },
+      { onConflict: "key" }
+    );
+    setSaving(false); setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
+  };
+
+  const add = () => {
+    const trimmed = newOpt.trim();
+    if (!trimmed || options.includes(trimmed)) return;
+    const updated = [...options, trimmed];
+    setOptions(updated);
+    setNewOpt("");
+    save(updated);
+  };
+
+  const remove = (opt: string) => {
+    const updated = options.filter(o => o !== opt);
+    setOptions(updated);
+    save(updated);
+  };
+
+  return (
+    <AdminCard>
+      <div className="flex items-center justify-between mb-5">
+        <h3 className="font-outfit font-semibold text-foreground flex items-center gap-2">
+          <span className="w-1.5 h-4 rounded-full bg-accent inline-block" />
+          "What are you looking for?" Options
+        </h3>
+        {saving && <Loader2 className="w-3.5 h-3.5 animate-spin text-muted-foreground" />}
+        {saved  && <CheckCircle2 className="w-3.5 h-3.5 text-green-400" />}
+      </div>
+      <p className="text-xs text-muted-foreground mb-4">These appear in the contact form dropdown when visitors click "Get in Touch" or "Join the Program".</p>
+
+      <div className="flex flex-wrap gap-2 mb-4">
+        {options.map(opt => (
+          <div key={opt} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted/60 border border-border/50 text-sm text-foreground">
+            {opt}
+            <button
+              onClick={() => remove(opt)}
+              className="text-muted-foreground hover:text-destructive transition-colors ml-1"
+            >
+              <Trash2 className="w-3 h-3" />
+            </button>
+          </div>
+        ))}
+      </div>
+
+      <div className="flex gap-2">
+        <input
+          value={newOpt}
+          onChange={e => setNewOpt(e.target.value)}
+          onKeyDown={e => e.key === "Enter" && add()}
+          placeholder="Add a new option…"
+          className="flex-1 px-4 py-2.5 rounded-xl bg-muted/40 border border-border/60 text-foreground text-sm focus:outline-none focus:border-primary/60 transition-colors"
+        />
+        <motion.button
+          onClick={add}
+          whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
+          className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-primary/10 hover:bg-primary/20 text-primary text-sm font-medium border border-primary/20 transition-colors"
+        >
+          <Plus className="w-4 h-4" /> Add
+        </motion.button>
+      </div>
+
+      {/* Show email toggle */}
+      <div className="flex items-center justify-between mt-5 pt-5 border-t border-border/40">
+        <div>
+          <p className="text-sm font-medium text-foreground">Show email address in form</p>
+          <p className="text-xs text-muted-foreground mt-0.5">Displays "Or email us directly at…" below the submit button</p>
+        </div>
+        <div className="flex items-center gap-2">
+          {emailSaving && <Loader2 className="w-3.5 h-3.5 animate-spin text-muted-foreground" />}
+          <VisibilityToggle visible={showEmail} onChange={toggleEmail} />
+        </div>
+      </div>
+    </AdminCard>
+  );
+}
+
 function SubmissionsTab() {
   const [items, setItems] = useState<Submission[]>([]);
   const [loading, setLoading] = useState(true);
@@ -1187,6 +1300,8 @@ function SubmissionsTab() {
 
   return (
     <motion.div variants={staggerList} animate="animate" className="space-y-4">
+      <InquiryOptionsManager />
+
       {/* Summary */}
       <AdminCard>
         <div className="flex items-center justify-between">
